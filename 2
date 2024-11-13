@@ -1,0 +1,112 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// Класс для работы с комплексными числами
+class Complex {
+    private double real;
+    private double imaginary;
+
+    public Complex(double real, double imaginary) {
+        this.real = real;
+        this.imaginary = imaginary;
+    }
+
+    public Complex add(Complex other) {
+        return new Complex(this.real + other.real, this.imaginary + other.imaginary);
+    }
+
+    @Override
+    public String toString() {
+        if (imaginary == 0) {
+            return String.valueOf(real);
+        } else if (real == 0) {
+            return imaginary + "i";
+        } else if (imaginary > 0) {
+            return real + " + " + imaginary + "i";
+        } else {
+            return real + " - " + (-imaginary) + "i";
+        }
+    }
+
+    public boolean isZero() {
+        return real == 0 && imaginary == 0;
+    }
+}
+
+// Класс Полином с комплексными коэффициентами
+class Polynomial {
+    private Complex[] coefficients;
+
+    public Polynomial(Complex[] coefficients) {
+        this.coefficients = coefficients;
+    }
+
+    // Метод для сложения двух полиномов
+    public Polynomial add(Polynomial other) {
+        int maxDegree = Math.max(this.coefficients.length, other.coefficients.length);
+        Complex[] resultCoefficients = new Complex[maxDegree];
+
+        for (int i = 0; i < maxDegree; i++) {
+            Complex thisCoef = (i < this.coefficients.length) ? this.coefficients[i] : new Complex(0, 0);
+            Complex otherCoef = (i < other.coefficients.length) ? other.coefficients[i] : new Complex(0, 0);
+            resultCoefficients[i] = thisCoef.add(otherCoef);
+        }
+
+        return new Polynomial(resultCoefficients);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+
+        for (int i = 0; i < coefficients.length; i++) {
+            if (coefficients[i].isZero()) continue;
+
+            if (!first) {
+                sb.append(" + ");
+            }
+            first = false;
+
+            if (i == 0) {
+                sb.append(coefficients[i].toString());
+            } else {
+                sb.append(coefficients[i].toString()).append("x^").append(i);
+            }
+        }
+
+        if (first) {
+            return "0";
+        }
+
+        return sb.toString();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Пример полиномов
+        Complex[] coeffs1 = {new Complex(1, 2), new Complex(3, 4), new Complex(5, 6)};
+        Complex[] coeffs2 = {new Complex(2, 1), new Complex(1, 0), new Complex(3, 3)};
+        Complex[] coeffs3 = {new Complex(0, 1), new Complex(4, 2)};
+
+        Polynomial poly1 = new Polynomial(coeffs1);
+        Polynomial poly2 = new Polynomial(coeffs2);
+        Polynomial poly3 = new Polynomial(coeffs3);
+
+        // Список полиномов
+        List<Polynomial> polynomials = new ArrayList<>();
+        polynomials.add(poly1);
+        polynomials.add(poly2);
+        polynomials.add(poly3);
+
+        // Сложение всех полиномов
+        Polynomial sum = polynomials.get(0);
+        for (int i = 1; i < polynomials.size(); i++) {
+            sum = sum.add(polynomials.get(i));
+        }
+
+        // Вывод результата
+        System.out.println("Сумма полиномов: " + sum);
+    }
+}
