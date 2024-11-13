@@ -1,0 +1,113 @@
+import java.util.Arrays;
+
+class IntVector {
+    private int[] elements;
+
+    // Конструктор с заданиями границ
+    public IntVector(int size) {
+        if (size <= 0) {
+            throw new IllegalArgumentException("Размер вектора должен быть положительным.");
+        }
+        elements = new int[size];
+    }
+
+    // Метод для заполнения вектора
+    public void setElements(int[] values) {
+        if (values.length != elements.length) {
+            throw new IllegalArgumentException("Размеры массивов не совпадают.");
+        }
+        System.arraycopy(values, 0, elements, 0, values.length);
+    }
+
+    // Метод для получения элементов вектора
+    public int getElement(int index) {
+        if (index < 0 || index >= elements.length) {
+            throw new IndexOutOfBoundsException("Индекс выходит за пределы вектора.");
+        }
+        return elements[index];
+    }
+
+    // Метод для сложения двух векторов
+    public IntVector add(IntVector other) {
+        if (this.elements.length != other.elements.length) {
+            throw new IllegalArgumentException("Векторы должны быть одинакового размера.");
+        }
+        IntVector result = new IntVector(elements.length);
+        for (int i = 0; i < elements.length; i++) {
+            result.elements[i] = this.elements[i] + other.elements[i];
+        }
+        return result;
+    }
+
+    // Метод для вычитания двух векторов
+    public IntVector subtract(IntVector other) {
+        if (this.elements.length != other.elements.length) {
+            throw new IllegalArgumentException("Векторы должны быть одинакового размера.");
+        }
+        IntVector result = new IntVector(elements.length);
+        for (int i = 0; i < elements.length; i++) {
+            result.elements[i] = this.elements[i] - other.elements[i];
+        }
+        return result;
+    }
+
+    // Метод для умножения всех элементов на скаляр
+    public void multiplyByScalar(int scalar) {
+        for (int i = 0; i < elements.length; i++) {
+            elements[i] *= scalar;
+        }
+    }
+
+    // Метод для деления всех элементов на скаляр
+    public void divideByScalar(int scalar) {
+        if (scalar == 0) {
+            throw new IllegalArgumentException("Деление на ноль!");
+        }
+        for (int i = 0; i < elements.length; i++) {
+            elements[i] /= scalar;
+        }
+    }
+
+    // Метод для вывода вектора
+    public void print() {
+        System.out.println("Элементы массива: " + Arrays.toString(elements));
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Создание двух векторов
+        IntVector vector1 = new IntVector(5);
+        IntVector vector2 = new IntVector(5);
+
+        // Заполнение векторов
+        vector1.setElements(new int[]{1, 2, 3, 4, 5});
+        vector2.setElements(new int[]{2, 4, 6, 8, 10});
+
+        // Печать векторов
+        System.out.print("Вектор 1: ");
+        vector1.print();
+        System.out.print("Вектор 2: ");
+        vector2.print();
+
+        // Сумма векторов
+        IntVector sumVector = vector1.add(vector2);
+        System.out.print("Сумма векторов: ");
+        sumVector.print();
+
+        // Разность векторов
+        IntVector subVector = vector1.subtract(vector2);
+        System.out.print("Разность векторов: ");
+        subVector.print();
+
+        // Умножение вектора 1 на 2
+        vector1.multiplyByScalar(2);
+        System.out.print("Вектор 1 после умножения на 2: ");
+        vector1.print();
+
+        // Деление вектора 2 на 2
+        vector2.divideByScalar(2);
+        System.out.print("Вектор 2 после деления на 2: ");
+        vector2.print();
+    }
+}
