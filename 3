@@ -1,0 +1,132 @@
+// Класс, представляющий элемент массива
+class Element {
+    private int value;
+
+    public Element(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    // Методы для выполнения арифметических операций
+    public Element add(Element other) {
+        return new Element(this.value + other.value);
+    }
+
+    public Element subtract(Element other) {
+        return new Element(this.value - other.value);
+    }
+
+    public Element multiply(Element other) {
+        return new Element(this.value * other.value);
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
+}
+
+// Класс, представляющий одномерный массив
+class Array1D {
+    private Element[] elements;
+
+    public Array1D(int size) {
+        elements = new Element[size];
+    }
+
+    // Метод для заполнения массива
+    public void create(int[] values) {
+        if (values.length != elements.length) {
+            throw new IllegalArgumentException("Размер массива не совпадает с количеством элементов!");
+        }
+        for (int i = 0; i < values.length; i++) {
+            elements[i] = new Element(values[i]);
+        }
+    }
+
+    // Метод для вывода массива на консоль
+    public void print() {
+        for (Element element : elements) {
+            System.out.print(element + " ");
+        }
+        System.out.println();
+    }
+
+    // Метод для сложения двух массивов
+    public Array1D add(Array1D other) {
+        checkSameSize(other);
+        Array1D result = new Array1D(elements.length);
+        for (int i = 0; i < elements.length; i++) {
+            result.elements[i] = this.elements[i].add(other.elements[i]);
+        }
+        return result;
+    }
+
+    // Метод для вычитания двух массивов
+    public Array1D subtract(Array1D other) {
+        checkSameSize(other);
+        Array1D result = new Array1D(elements.length);
+        for (int i = 0; i < elements.length; i++) {
+            result.elements[i] = this.elements[i].subtract(other.elements[i]);
+        }
+        return result;
+    }
+
+    // Метод для перемножения двух массивов
+    public Array1D multiply(Array1D other) {
+        checkSameSize(other);
+        Array1D result = new Array1D(elements.length);
+        for (int i = 0; i < elements.length; i++) {
+            result.elements[i] = this.elements[i].multiply(other.elements[i]);
+        }
+        return result;
+    }
+
+    // Проверка на совпадение размера массивов
+    private void checkSameSize(Array1D other) {
+        if (this.elements.length != other.elements.length) {
+            throw new IllegalArgumentException("Массивы должны быть одинакового размера!");
+        }
+    }
+}
+
+// Основной класс для тестирования
+public class Main {
+    public static void main(String[] args) {
+        // Создание двух массивов
+        Array1D array1 = new Array1D(3);
+        Array1D array2 = new Array1D(3);
+
+        // Заполнение массивов
+        array1.create(new int[]{1, 2, 3});
+        array2.create(new int[]{4, 5, 6});
+
+        // Вывод на консоль
+        System.out.print("Массив 1: ");
+        array1.print();
+        System.out.print("Массив 2: ");
+        array2.print();
+
+        // Сложение массивов
+        Array1D sumArray = array1.add(array2);
+        System.out.print("Сумма массивов: ");
+        sumArray.print();
+
+        // Вычитание массивов
+        Array1D subArray = array1.subtract(array2);
+        System.out.print("Разность массивов: ");
+        subArray.print();
+
+        // Умножение массивов
+        Array1D mulArray = array1.multiply(array2);
+        System.out.print("Произведение массивов: ");
+        mulArray.print();
+    }
+}
