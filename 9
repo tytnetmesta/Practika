@@ -1,0 +1,161 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+// Класс для представления курицы
+class Chicken {
+    private int x;
+    private int y;
+
+    public Chicken(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() { return x; }
+    public int getY() { return y; }
+
+    public void move(int newX, int newY) {
+        this.x = newX;
+        this.y = newY;
+    }
+}
+
+// Класс для представления лисы
+class Fox {
+    private int x;
+    private int y;
+
+    public Fox(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() { return x; }
+    public int getY() { return y; }
+
+    // Метод для перемещения лисы
+    public void move(int newX, int newY) {
+        this.x = newX;
+        this.y = newY;
+    }
+
+    // Метод для проверки возможности съесть курицу
+    public boolean canEat(Chicken chicken) {
+        int chickenX = chicken.getX();
+        int chickenY = chicken.getY();
+        // Проверяем горизонтальное и вертикальное направление
+        return (x == chickenX && Math.abs(y - chickenY) == 2) || (y == chickenY && Math.abs(x - chickenX) == 2);
+    }
+}
+
+// Класс для представления игрового поля
+class GameBoard {
+    private final int width;
+    private final int height;
+    final List<Chicken> chickens;
+    private final List<Fox> foxes;
+
+    public GameBoard(int width, int height) {
+        this.width = width;
+        this.height = height;
+        this.chickens = new ArrayList<>();
+        this.foxes = new ArrayList<>();
+    }
+
+    public void addChicken(Chicken chicken) {
+        chickens.add(chicken);
+    }
+
+    public void addFox(Fox fox) {
+        foxes.add(fox);
+    }
+
+    public void moveChicken(Chicken chicken, int newX, int newY) {
+        if (isInBounds(newX, newY)) {
+            chicken.move(newX, newY);
+        } else {
+            System.out.println("Курица выходит за пределы поля!");
+        }
+    }
+
+    public void moveFox(Fox fox, int newX, int newY) {
+        if (isInBounds(newX, newY)) {
+            fox.move(newX, newY);
+        } else {
+            System.out.println("Лиса выходит за пределы поля!");
+        }
+    }
+
+    private boolean isInBounds(int x, int y) {
+        return x >= 0 && x < width && y >= 0 && y < height;
+    }
+
+    public void simulateFoxMoves() {
+        for (Fox fox : foxes) {
+            // Логика для поедания кур
+            for (Chicken chicken : chickens) {
+                if (fox.canEat(chicken)) {
+                    System.out.println("Лиса съела курицу на (" + chicken.getX() + ", " + chicken.getY() + ")");
+                    chickens.remove(chicken);
+                    break; // Лиса может съесть только одну курицу за ход
+                }
+            }
+        }
+    }
+
+    public boolean isFoxWin() {
+        return (20 - chickens.size()) >= 12; // Если лисы съели 12 куриц
+    }
+
+    public boolean isChickenWin() {
+        return chickens.size() >= 9; // Если курицы заняли 9 клеток в верхней части поля
+    }
+
+    public void printStatus() {
+        System.out.println("Куриц на поле: " + chickens.size());
+        System.out.println("Лис на поле: " + foxes.size());
+    }
+}
+
+// Основной класс игры
+class TwoFoxesAndTwentyChickens {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        GameBoard gameBoard = new GameBoard(7, 7); // Поле 7x7
+
+        // Создаем 20 куриц
+        for (int i = 0; i < 20; i++) {
+            gameBoard.addChicken(new Chicken(i % 7, i / 7));
+        }
+
+        // Создаем 2 лисы
+        gameBoard.addFox(new Fox(0, 0));
+        gameBoard.addFox(new Fox(6, 6));
+
+        // Основной игровой цикл
+        while (!gameBoard.isFoxWin() && !gameBoard.isChickenWin()) {
+            System.out.println("Текущий статус:");
+            gameBoard.printStatus();
+
+            // Ход игрока: перемещение курицы
+            System.out.println("Выберите курицу (0-19) и новые координаты (x y):");
+            int chickenIndex = scanner.nextInt();
+            int newX = scanner.nextInt();
+            int newY = scanner.nextInt();
+            gameBoard.moveChicken(gameBoard.chickens.get(chickenIndex), newX, newY);
+
+            // Ход лис
+            gameBoard.simulateFoxMoves();
+        }
+
+        // Определяем победителя
+        if (gameBoard.isFoxWin()) {
+            System.out.println("Лисы победили!");
+        } else {
+            System.out.println("Куры победили!");
+        }
+
+        scanner.close();
+    }
+}
