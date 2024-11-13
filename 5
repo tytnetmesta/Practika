@@ -1,0 +1,36 @@
+import java.util.HashSet;
+import java.util.Set;
+
+public class Main {
+
+    public static void main(String[] args) {
+        String text = "мама мыла раму анна арка пекло перепел око";
+
+        // Разделяем текст на слова
+        String[] words = text.split("\\s+");
+
+        // Множество для хранения уникальных слов
+        Set<String> uniqueWords = new HashSet<>();
+
+        // Проходим по каждому слову
+        for (String word : words) {
+            // Проверяем, что слово не пустое и его длина больше 1
+            if (word.length() > 1) {
+                // Получаем первую и последнюю букву
+                char firstChar = word.charAt(0);
+                char lastChar = word.charAt(word.length() - 1);
+
+                // Если первая и последняя буквы совпадают, добавляем в множество
+                if (firstChar == lastChar) {
+                    uniqueWords.add(word);
+                }
+            }
+        }
+
+        // Выводим уникальные слова
+        System.out.println("Слова, у которых первая и последняя буквы совпадают:");
+        for (String word : uniqueWords) {
+            System.out.println(word);
+        }
+    }
+}
