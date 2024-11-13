@@ -1,0 +1,47 @@
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+        // Исходная матрица
+        double[][] matrix = {
+                {10, 20, 30},
+                {40, 50, 60},
+                {70, 80, 90}
+        };
+
+        System.out.println("Исходная матрица:");
+        printMatrix(matrix);
+
+        // Преобразуем матрицу
+        subtractRowMean(matrix);
+
+        System.out.println("Модифицированная матрица:");
+        printMatrix(matrix);
+    }
+
+    // Метод для вычитания среднего арифметического из элементов каждой строки
+    public static void subtractRowMean(double[][] matrix) {
+        for (int i = 0; i < matrix.length; i++) {
+            double sum = 0;
+            // Считаем сумму элементов строки
+            for (int j = 0; j < matrix[i].length; j++) {
+                sum += matrix[i][j];
+            }
+
+            // Вычисляем среднее арифметическое
+            double mean = sum / matrix[i].length;
+
+            // Вычитаем среднее из каждого элемента строки
+            for (int j = 0; j < matrix[i].length; j++) {
+                matrix[i][j] -= mean;
+            }
+        }
+    }
+
+    // Метод для вывода матрицы
+    public static void printMatrix(double[][] matrix) {
+        for (double[] row : matrix) {
+            System.out.println(Arrays.toString(row));
+        }
+    }
+}
