@@ -1,0 +1,42 @@
+import javax.swing.*;
+import java.awt.*;
+
+class TeapotDrawing extends JPanel {
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        Graphics2D g2d = (Graphics2D) g;
+
+        g2d.setColor(Color.GREEN);
+        int[] xBase = {50, 150, 140, 60};
+        int[] yBase = {180, 180, 140, 140};
+        g2d.fillPolygon(xBase, yBase, 4);
+
+        g2d.setColor(Color.GREEN);
+        int[] xBody = {60, 140, 125, 75};
+        int[] yBody = {140, 140, 90, 90};
+        g2d.fillPolygon(xBody, yBody, 4);
+
+        g2d.setColor(Color.RED);
+        int[] xSpout = {125, 180, 185, 130};
+        int[] ySpout = {115, 100, 110, 120};
+        g2d.fillPolygon(xSpout, ySpout, 4);
+
+        g2d.setColor(Color.GREEN);
+        g2d.fillArc(75, 70, 50, 40, 0, 180);
+
+        g2d.setColor(Color.BLACK);
+        g2d.fillRect(95, 60, 10, 10);
+    }
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Teapot Drawing with Colors");
+        TeapotDrawing drawing = new TeapotDrawing();
+        frame.add(drawing);
+        frame.setSize(300, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+    }
+}
