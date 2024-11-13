@@ -1,0 +1,131 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// Основной класс Магазин
+class Shop {
+    private String name;
+    private List<Department> departments;
+
+    public Shop(String name) {
+        this.name = name;
+        this.departments = new ArrayList<>();
+    }
+
+    // Метод для добавления отдела в магазин
+    public Department addDepartment(String departmentName) {
+        Department department = new Department(departmentName);
+        departments.add(department);
+        return department; // Возвращаем созданный отдел, чтобы можно было добавить товары и услуги
+    }
+
+    // Метод для вывода информации о магазине и его отделах
+    public void printShopInfo() {
+        System.out.println("Магазин: " + name);
+        for (Department department : departments) {
+            department.printDepartmentInfo();
+        }
+    }
+
+    // Внутренний класс Отдел
+    class Department {
+        private String name;
+        private List<Product> products;
+        private List<Service> services;
+
+        public Department(String name) {
+            this.name = name;
+            this.products = new ArrayList<>();
+            this.services = new ArrayList<>();
+        }
+
+        // Метод для добавления товара в отдел
+        public void addProduct(String productName, double price) {
+            Product product = new Product(productName, price);
+            products.add(product);
+        }
+
+        // Метод для добавления услуги в отдел
+        public void addService(String serviceName, double cost) {
+            Service service = new Service(serviceName, cost);
+            services.add(service);
+        }
+
+        // Метод для вывода информации об отделе
+        public void printDepartmentInfo() {
+            System.out.println("Отдел: " + name);
+
+            // Вывод товаров
+            System.out.println("Товары:");
+            if (products.isEmpty()) {
+                System.out.println("Нет товаров");
+            } else {
+                for (Product product : products) {
+                    System.out.println("- " + product);
+                }
+            }
+
+            // Вывод услуг
+            System.out.println("Услуги:");
+            if (services.isEmpty()) {
+                System.out.println("Нет услуг");
+            } else {
+                for (Service service : services) {
+                    System.out.println("- " + service);
+                }
+            }
+        }
+
+        // Внутренний класс Товар
+        class Product {
+            private String name;
+            private double price;
+
+            public Product(String name, double price) {
+                this.name = name;
+                this.price = price;
+            }
+
+            @Override
+            public String toString() {
+                return name + " (Цена: " + price + " руб.)";
+            }
+        }
+
+        // Внутренний класс Услуга
+        class Service {
+            private String name;
+            private double cost;
+
+            public Service(String name, double cost) {
+                this.name = name;
+                this.cost = cost;
+            }
+
+            @Override
+            public String toString() {
+                return name + " (Стоимость: " + cost + " руб.)";
+            }
+        }
+    }
+}
+
+// Основной класс для тестирования
+public class Main {
+    public static void main(String[] args) {
+        // Создание магазина
+        Shop shop = new Shop("ТехноМир");
+
+        // Добавление отделов и товаров/услуг в отделы
+        Shop.Department electronics = shop.addDepartment("Электроника");
+        electronics.addProduct("Смартфон", 20000);
+        electronics.addProduct("Ноутбук", 50000);
+        electronics.addService("Гарантия", 3000);
+
+        Shop.Department appliances = shop.addDepartment("Бытовая техника");
+        appliances.addProduct("Холодильник", 30000);
+        appliances.addProduct("Стиральная машина", 25000);
+        appliances.addService("Доставка", 1500);
+
+        // Вывод информации о магазине
+        shop.printShopInfo();
+    }
